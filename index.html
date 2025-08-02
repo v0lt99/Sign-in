@@ -1,33 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Volt Site</title>
+  <title>Register - Volt Site</title>
   <style>
-    button {
-      background-color: #000000;
-      color: white;
-      font-size: 24px;
+    body { font-family: monospace; background: #111; color: #eee; padding: 20px; }
+    input, button {
+      padding: 8px;
+      margin: 5px 0;
+      font-size: 16px;
       border: none;
-      padding: 10px 20px;
       border-radius: 4px;
-      cursor: pointer;
     }
-    button:hover { background-color: #333333; }
-    #voltBox { margin-top: 10px; }
-    textarea { width: 300px; height: 100px; padding: 5px; }
-    #voltError { color: red; }
+    button { background: #1400ff; color: white; cursor: pointer; }
+    button:hover { background: #0f00cc; }
   </style>
 </head>
 <body>
+  <h2>Register</h2>
+  <form onsubmit="registerVolt(event)">
+    <input type="email" id="email" placeholder="Email" required><br>
+    <input type="password" id="pw" placeholder="Password" required><br>
+    <button type="submit">Register</button>
+  </form>
+  <p id="msg"></p>
 
-<button id="voltBtn">V:/</button>
-
-<div id="voltBox" style="display:none;">
-  <textarea id="voltInput" placeholder='volt @n "startup"'></textarea><br>
-  <button onclick="runVolt()">Run</button>
-  <p id="voltError"></p>
-</div>
-
-<script src="store.js"></script>
+  <script src="store.js"></script>
 </body>
 </html>
