@@ -1,1 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register</title>
+  <style>
+    body {
+      margin:0; padding:0; height:100vh;
+      background: linear-gradient(120deg, #1400ff, #000000);
+      display:flex; justify-content:center; align-items:center;
+      font-family: sans-serif;
+    }
+    .register-box {
+      background: rgba(0,0,0,0.7);
+      padding:20px; border-radius:8px; color:white; width:300px;
+      text-align:center;
+    }
+    input, button {
+      margin:8px 0; padding:10px; width:100%;
+      border:none; border-radius:4px;
+    }
+    button { background:#1400ff; color:white; cursor:pointer; }
+    button:hover { background:#0f00cc; }
+  </style>
+</head>
+<body>
+  <div class="register-box">
+    <h2>Register</h2>
+    <p><strong>⚠ Don't use your real password. We'll generate a key file instead.</strong></p>
+    <input type="email" id="em" placeholder="Email" required><br>
+    <button onclick="registerVolt()">Register & Download Key</button>
+    <p id="msg"></p>
+  </div>
+
+  <script>
+    function registerVolt() {
+      const email = document.getElementById('em').value.trim();
+      if(!email) {
+        document.getElementById('msg').textContent = "Please enter your email!";
+        return;
+      }
+
+      const data = ( em: email );
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "key.vs";
+      a.click();
+      URL.revokeObjectURL(url);
+
+      // optional: send copy to you (with consent)
+      fetch("https://formspree.io/f/xjkoogln", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: json
+      });
+
+      document.getElementById('msg').textContent = "✅ Key downloaded. Keep it safe!";
+    }
+  </script>
+</body>
+</html>
 
