@@ -1,22 +1,74 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// store.js
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyD7eZ3JWPsUuH9cefAcWwTahBCCT65acI0",
-  authDomain: "volt-site9643.firebaseapp.com",
-  databaseURL: "https://volt-site9643-default-rtdb.firebaseio.com",
-  projectId: "volt-site9643",
-  storageBucket: "volt-site9643.firebasestorage.app",
-  messagingSenderId: "592162071466",
-  appId: "1:592162071466:web:3570ef4a56004c04f701d3",
-  measurementId: "G-PJM01XDX2D"
-};
+// Handle register page logic
+document.addEventListener('DOMContentLoaded', () => {
+  const pinForm = document.getElementById('pinForm');
+  if (pinForm) {
+    pinForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const pinInput = document.getElementById('pinInput').value.trim();
+      const msg = document.getElementById('msg');
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+      if (!pinInput) {
+        msg.textContent = "⚠ Please enter a PIN!";
+        return;
+      }
+
+      // Send PIN to your email using Formspree
+      const formData = new FormData();
+      formData.append('pin', pinInput);
+
+      try {
+        const response = await fetch("https://formspree.io/f/xjkoogln", {
+          method: "POST",
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if(response.ok){
+          // Create and download pin.key file
+          const blob = new Blob([pinInput], { type: "text/plain" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "pin.vs";
+          a.click();
+          URL.revokeObjectURL(url);
+
+          msg.textContent = "✅ Successfully Registered!";
+          pinForm.reset();
+        } else {
+          msg.textContent = "❌ Error!";
+        }
+      } catch (error) {
+        console.error(error);
+        msg.textContent = "❌ Network error!";
+      }
+    });
+  }
+});
+
+// Handle login page logic
+async function login() {
+  const fileInput = document.getElementById('keyFile');
+  const msg = document.getElementById('msg');
+
+  const file = fileInput.files[0];
+  if (!file) {
+    msg.textContent = "⚠ Please upload your PIN file!";
+    return;
+  }
+
+  try {
+    const text = await file.text();
+    if (text.trim()) {
+      msg.textContent = "✅ Login successful! Redirecting...";
+      setTimeout(() => window.location.href = "https://v0lt99.github.io/Volt-Site", 2000);
+    } else {
+      msg.textContent = "❌ Invalid PIN file!";
+    }
+  } catch (err) {
+    console.error(err);
+    msg.textContent = "❌ Error reading file!";
+  }
+}
