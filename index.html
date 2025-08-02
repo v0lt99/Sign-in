@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login with PIN file</title>
+  <style>
+    body {
+      margin:0; padding:0; height:100vh;
+      background: linear-gradient(120deg, #1400ff, #000000);
+      display:flex; justify-content:center; align-items:center;
+      font-family: sans-serif; color:white;
+    }
+    .box {
+      background: rgba(0,0,0,0.7);
+      padding:20px; border-radius:8px; width:300px; text-align:center;
+    }
+    input, button {
+      margin:8px 0; padding:10px; width:100%;
+      border:none; border-radius:4px;
+    }
+    button { background:#1400ff; color:white; cursor:pointer; }
+    button:hover { background:#0f00cc; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Login</h2>
+    <p>Upload your PIN file to login</p>
+    <input type="file" id="keyFile" required><br>
+    <button onclick="login()">Login</button>
+    <p id="msg"></p>
+  </div>
+
+  <script src="store.js"></script>
+</body>
+</html>
